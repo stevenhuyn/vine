@@ -57,8 +57,11 @@ impl Compiler<'_> {
       let i = self_.new_interface();
       let s = self_.new_stage(i, move |self_, s| {
         let old = self_.break_target.replace(self_.cur_fork());
-        self_.loop_target.replace((self_.cur_fork(), s));
-        self_.lower_block_erase(body);
+
+        self_.new_fork(|self_| {
+          self_.loop_target.replace((self_.cur_fork(), s));
+          self_.lower_block_erase(body);
+        });
         self_.break_target = old;
         self_.goto(s);
         false
