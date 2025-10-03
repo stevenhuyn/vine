@@ -1,6 +1,16 @@
 FROM ubuntu:24.04
 
-# Install basic dependencies
+ARG USERNAME=ubuntu
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Create the user
+RUN apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Install basic dependencies (as root)
 RUN apt-get update \
     && apt-get install -y \
     curl \
@@ -9,16 +19,22 @@ RUN apt-get update \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
+# Switch to the user
+USER $USERNAME
+
+# # Install Rust 
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 
 # Install dprint
 RUN curl -fsSL https://dprint.dev/install.sh | sh
-ENV PATH="/root/.dprint/bin:${PATH}"
+ENV PATH="/home/${USERNAME}/.dprint/bin:${PATH}"
 
-# Set bash prompt
-RUN echo 'PS1="\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> /root/.bashrc
+# Configure colored prompt
+RUN echo 'export PS1="\[\e[32m\]\u@\h\[\e[m\]:\[\e[34m\]\w\[\e[m\]\$ "' >> /home/${USERNAME}/.bashrc
 
 # Set working directory
-WORKDIR /workspace
+WORKDIR /workspaces
+USER root
+RUN chown -R $USERNAME:$USERNAME /workspaces
+USER $USERNAME
