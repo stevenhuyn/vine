@@ -1,0 +1,21 @@
+{
+  "name": "vine-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "vine.entrypoints": ["src/main.vi"],
+        "rust-analyzer.check.command": "clippy"
+      },
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml"
+      ]
+    }
+  },
+
+  "remoteUser": "root"
+}
