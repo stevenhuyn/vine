@@ -3,24 +3,28 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  
+
   "customizations": {
     "vscode": {
       "settings": {
-        "vine.entrypoints": ["src/main.vi"],
-        "rust-analyzer.check.command": "clippy"
+        "rust-analyzer.check.command": "clippy",
+        "[vine]": {
+          "editor.defaultFormatter": "dprint.dprint"
+        },
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer",
+          "editor.formatOnSave": true
+        }
       },
       "extensions": [
         "rust-lang.rust-analyzer",
-        "tamasfe.even-better-toml"
+        "tamasfe.even-better-toml",
+        "dprint.dprint"
       ]
     }
   },
 
   "remoteUser": "ubuntu",
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/devcontainers/features/rust:1": {}
-  }
+  "containerUser": "ubuntu",
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
 }

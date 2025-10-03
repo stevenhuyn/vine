@@ -22,9 +22,14 @@ RUN apt-get update \
 # Switch to the user
 USER $USERNAME
 
-# # Install Rust 
-# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-# ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
+# Install Rust 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
+
+# Install fnm and Node
+RUN curl -fsSL https://fnm.vercel.app/install | bash
+ENV PATH="/home/${USERNAME}/.local/share/fnm:${PATH}"
+RUN eval "$(fnm env)" && fnm install 22
 
 # Install dprint
 RUN curl -fsSL https://dprint.dev/install.sh | sh
