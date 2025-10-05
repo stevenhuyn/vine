@@ -29,7 +29,7 @@ ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 # Install fnm and Node
 RUN curl -fsSL https://fnm.vercel.app/install | bash
 ENV PATH="/home/${USERNAME}/.local/share/fnm:${PATH}"
-RUN eval "$(fnm env)" && fnm install 22
+RUN eval "$(fnm env --shell bash)" && fnm install 22
 
 # Install dprint
 RUN curl -fsSL https://dprint.dev/install.sh | sh
